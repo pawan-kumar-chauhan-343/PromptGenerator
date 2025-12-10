@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dance Prompt Generator Ultimate (High Energy)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Custom scrollbar */
+        textarea::-webkit-scrollbar, div::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track, div::-webkit-scrollbar-track {
+            background: #1f2937; 
+        }
+        textarea::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+            background: #4b5563; 
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover, div::-webkit-scrollbar-thumb {
+            background: #6b7280; 
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="w-full bg-gray-800 border-b border-gray-700 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-yellow-500 text-xl"></i>
+                <h1 class="text-xl font-bold tracking-wide">Dance<span class="text-teal-400">Gen</span> Turbo Edition</h1>
+            </div>
+            <button id="logoutBtn" class="hidden text-sm bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1.5 rounded transition">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <!-- Login Section -->
+        <div id="loginSection" class="w-full max-w-md glass-panel p-8 rounded-2xl shadow-2xl transform transition-all duration-300">
+            <div class="text-center mb-6">
+                <i class="fa-brands fa-google text-4xl text-gray-400 mb-4"></i>
+                <h2 class="text-2xl font-bold mb-2">Gemini API Access</h2>
+                <p class="text-gray-400 text-sm">Enter your API key to start generating professional dance prompts.</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">API Key</label>
+                    <input type="password" id="apiKeyInput" required placeholder="AIzaSy..." 
+                        class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 transition">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-400 hover:to-blue-500 text-white font-bold py-3 rounded-lg shadow-lg transform hover:-translate-y-0.5 transition duration-200">
+                    Access Application
+                </button>
+            </form>
+            <p class="mt-4 text-xs text-center text-gray-500">Your key is stored locally in your browser.</p>
+        </div>
+
+        <!-- App Interface Section -->
+        <div id="appSection" class="hidden w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Input Column (Left) -->
+            <div class="lg:col-span-5 glass-panel p-6 rounded-2xl shadow-xl space-y-5">
+                <h2 class="text-xl font-semibold border-b border-gray-700 pb-3 mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders mr-2 text-teal-400"></i> Configuration
+                </h2>
+
+                <form id="promptForm" class="space-y-4">
+                    
+                    <!-- Row 1: AI Model & Duration -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Target AI Model</label>
+                            <div class="relative">
+                                <select id="aiModel" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2.5 appearance-none focus:ring-2 focus:ring-teal-500">
+                                    <option value="Meta Movie Gen" data-duration="5">Meta Movie Gen</option>
+                                    <option value="Grok" data-duration="6">Grok (X.AI)</option>
+                                    <option value="Veo3" data-duration="8">Google Veo 3</option>
+                                    <option value="Sora" data-duration="5">OpenAI Sora</option>
+                                    <option value="Kling" data-duration="5">Kling AI</option>
+                                    <option value="Runway Gen-3" data-duration="10">Runway Gen-3</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down absolute right-3 top-3.5 text-gray-500 text-xs"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Duration (Auto)</label>
+                            <div class="flex items-center bg-gray-700/50 border border-gray-600 rounded-lg px-3 py-2.5 text-gray-300">
+                                <i class="fa-regular fa-clock mr-2 text-teal-400"></i>
+                                <span id="durationDisplay">5 Seconds</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Dance Selection & Count -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-2">
+                            <label class="block text-xs text-gray-400 mb-1">Dance Style</label>
+                            <input type="text" list="danceList" id="danceInput" placeholder="Type to search (e.g. Samba)" 
+                                class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-teal-500">
+                            <datalist id="danceList">
+                                <!-- Populated by JS -->
+                            </datalist>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1"># Video Prompts</label>
+                            <input type="number" id="numPrompts" value="1" min="1" max="5" 
+                                class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2.5 text-center focus:ring-2 focus:ring-teal-500">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Viral Trend Selection -->
+                    <div>
+                        <label class="block text-xs text-teal-400 font-semibold mb-1">
+                            <i class="fa-solid fa-fire mr-1"></i> Viral Trends & Era
+                        </label>
+                        <div class="relative">
+                            <select id="trendEra" class="w-full bg-gray-800 border border-teal-500/50 rounded-lg px-3 py-2.5 appearance-none focus:ring-2 focus:ring-teal-500 text-white">
+                                <option value="Latest Trending (Default)">Latest Trending (Insta/TikTok/YouTube Viral)</option>
+                                <!-- JS will populate 2025-2010 here -->
+                            </select>
+                            <i class="fa-solid fa-calendar-days absolute right-3 top-3.5 text-teal-500 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Speed -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Movement Speed (High Energy Only)</label>
+                        <div class="relative">
+                            <select id="danceSpeed" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2.5 appearance-none focus:ring-2 focus:ring-teal-500">
+                                <option value="Fast" selected>Fast</option>
+                                <option value="Very Fast">Very Fast</option>
+                                <option value="Ultra Fast">Ultra Fast (Intense)</option>
+                                <option value="High Energy">High Energy Remix</option>
+                            </select>
+                            <i class="fa-solid fa-gauge-high absolute right-3 top-3.5 text-gray-500 text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Optional Details -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Additional Context</label>
+                        <textarea id="additionalContext" rows="3" placeholder="E.g., Neon lighting, cyberpunk street, rainy weather..." 
+                            class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500"></textarea>
+                    </div>
+
+                    <!-- Info Box -->
+                    <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 space-y-2">
+                        <div class="flex items-start gap-2 text-xs text-yellow-200">
+                            <i class="fa-solid fa-dog mt-0.5"></i>
+                            <span>Character locked as <strong>Dog Boy</strong>.</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-xs text-yellow-200">
+                            <i class="fa-solid fa-bolt mt-0.5"></i>
+                            <span><strong>Mode:</strong> Street Battle / 8K / No Duration limit.</span>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" id="generateBtn" class="w-full bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-400 hover:to-blue-500 text-white font-bold py-3 rounded-lg shadow-lg transform active:scale-95 transition flex justify-center items-center gap-2">
+                        <span>Generate Prompts</span>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Output Column (Right) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Loading State -->
+                <div id="loadingIndicator" class="hidden glass-panel p-10 rounded-2xl shadow-xl flex flex-col items-center justify-center text-gray-400 min-h-[400px]">
+                    <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-teal-400 mb-4"></div>
+                    <h3 class="text-xl text-teal-300 font-bold animate-pulse">Designing High-Energy Moves</h3>
+                    <p class="text-sm mt-2">Checking color contrast for "poorDogy" branding...</p>
+                    <p class="text-xs text-gray-500 mt-1">Applying Street Battle aesthetics & 8K Rendering...</p>
+                    <p class="text-xs text-teal-500 mt-2 font-mono">Writing Viral Social Media Metadata...</p>
+                </div>
+
+                <!-- Results Area -->
+                <div id="resultsContainer" class="hidden space-y-6">
+                    
+                    <!-- Style & Branding Card -->
+                    <div class="bg-gradient-to-br from-indigo-900/80 to-purple-900/80 border border-indigo-500/50 rounded-xl p-5 shadow-lg relative group">
+                        <div class="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
+                            <h3 class="text-lg font-bold text-white flex items-center">
+                                <i class="fa-solid fa-user-tag mr-2 text-purple-400"></i> Character Style & Branding
+                            </h3>
+                            <button id="copyStyleBtn" class="text-sm bg-black/30 hover:bg-black/50 text-white px-3 py-1 rounded transition border border-white/20">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <div class="text-sm text-gray-200 font-mono whitespace-pre-line leading-relaxed" id="stylePromptContent">
+                            <!-- Style prompt content goes here -->
+                        </div>
+                        <div class="mt-3 flex gap-2 text-[10px] text-purple-200 uppercase font-bold tracking-wider">
+                            <span class="bg-purple-800/50 px-2 py-1 rounded">Dog Boy</span>
+                            <span class="bg-purple-800/50 px-2 py-1 rounded">High Contrast</span>
+                            <span class="bg-purple-800/50 px-2 py-1 rounded">Outfit</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Metadata Section -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Instagram Card -->
+                        <div class="bg-gradient-to-br from-pink-900/30 to-purple-900/30 border border-pink-500/30 rounded-xl p-5 shadow-lg flex flex-col h-full">
+                            <h3 class="text-sm font-bold text-pink-300 mb-4 flex items-center gap-2">
+                                <i class="fa-brands fa-instagram text-xl"></i> Instagram Shorts
+                            </h3>
+                            
+                            <!-- Title -->
+                            <div class="mb-4">
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Title (Tags + Emojis)</label>
+                                <div class="relative">
+                                    <div id="instaTitle" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[40px] whitespace-pre-wrap"></div>
+                                    <button onclick="robustCopy(document.getElementById('instaTitle').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Pin Comment -->
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Pin Comment</label>
+                                <div class="relative">
+                                    <div id="instaComment" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[40px] whitespace-pre-wrap"></div>
+                                    <button onclick="robustCopy(document.getElementById('instaComment').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- YouTube Card -->
+                        <div class="bg-gradient-to-br from-red-900/30 to-orange-900/30 border border-red-500/30 rounded-xl p-5 shadow-lg flex flex-col h-full">
+                            <h3 class="text-sm font-bold text-red-300 mb-4 flex items-center gap-2">
+                                <i class="fa-brands fa-youtube text-xl"></i> YouTube Shorts
+                            </h3>
+                            
+                            <!-- Title -->
+                            <div class="mb-4">
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Title (Tags + Emojis)</label>
+                                <div class="relative">
+                                    <div id="ytTitle" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[40px] whitespace-pre-wrap"></div>
+                                    <button onclick="robustCopy(document.getElementById('ytTitle').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- SEO Tags -->
+                            <div class="mb-4">
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">SEO Tags (Comma Separated)</label>
+                                <div class="relative">
+                                    <div id="ytSeoTags" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[40px] whitespace-pre-wrap text-justify"></div>
+                                    <button onclick="robustCopy(document.getElementById('ytSeoTags').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Video Description -->
+                            <div class="mb-4">
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Description (Title + Info + Vertical Tags)</label>
+                                <div class="relative">
+                                    <div id="ytDescription" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[100px] whitespace-pre-wrap overflow-y-auto max-h-[150px]"></div>
+                                    <button onclick="robustCopy(document.getElementById('ytDescription').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Pin Comment -->
+                            <div>
+                                <label class="text-[10px] uppercase text-gray-500 font-bold mb-1 block">Pin Comment</label>
+                                <div class="relative">
+                                    <div id="ytComment" class="bg-black/30 rounded p-2 text-xs text-gray-200 pr-8 min-h-[40px] whitespace-pre-wrap"></div>
+                                    <button onclick="robustCopy(document.getElementById('ytComment').innerText, this)" class="absolute top-1.5 right-1.5 text-gray-500 hover:text-white p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Video Prompts List -->
+                    <div id="videoPromptsList" class="space-y-4">
+                        <!-- Video prompts injected here -->
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="glass-panel p-10 rounded-2xl shadow-xl flex flex-col items-center justify-center text-gray-500 min-h-[400px]">
+                    <i class="fa-solid fa-bolt text-5xl mb-4 opacity-30"></i>
+                    <h3 class="text-lg font-medium">Ready to Create</h3>
+                    <p class="text-sm">Select preferences for high-energy Dog Boy dance.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-gray-600">
+        Powered by Google Gemini • Built for AI Video Creators
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // --- Data ---
+        const danceDatabase = [
+            { name: "Bharatanatyam", country: "India" }, { name: "Kathak", country: "India" }, 
+            { name: "Kathakali", country: "India" }, { name: "Kuchipudi", country: "India" }, 
+            { name: "Odissi", country: "India" }, { name: "Sattriya", country: "India" }, 
+            { name: "Manipuri", country: "India" }, { name: "Mohiniyattam", country: "India" }, 
+            { name: "Chhau", country: "India" }, { name: "Lavani", country: "India" }, 
+            { name: "Koli", country: "India" }, { name: "Lezim", country: "India" }, 
+            { name: "Bhangra", country: "India" }, { name: "Giddha", country: "India" }, 
+            { name: "Garba", country: "India" }, { name: "Dandiya Raas", country: "India" }, 
+            { name: "Ghoomar", country: "India" }, { name: "Kalbelia", country: "India" }, 
+            { name: "Bihu", country: "India" }, { name: "Yakshagana", country: "India" }, 
+            { name: "Samba", country: "Brazil" }, { name: "Tango", country: "Argentina" }, 
+            { name: "Flamenco", country: "Spain" }, { name: "Waltz", country: "Austria" }, 
+            { name: "Polka", country: "Czech Republic" }, { name: "Capoeira", country: "Brazil" }, 
+            { name: "Salsa", country: "Cuba" }, { name: "Merengue", country: "Dominican Republic" }, 
+            { name: "Bachata", country: "Dominican Republic" }, { name: "Cha-Cha-Cha", country: "Cuba" }, 
+            { name: "Paso Doble", country: "Spain" }, { name: "Cancan", country: "France" }, 
+            { name: "Tarantella", country: "Italy" }, { name: "Syrtaki", country: "Greece" }, 
+            { name: "Tinikling", country: "Philippines" }, { name: "Kabuki", country: "Japan" },
+            { name: "Haka", country: "New Zealand" }, { name: "Poi", country: "New Zealand" },
+            { name: "Dragon Dance", country: "China" }, { name: "Lion Dance", country: "China" },
+            { name: "Yangge", country: "China" }, { name: "Buchaechum (Fan Dance)", country: "Korea" },
+            { name: "Talchum", country: "Korea" }, { name: "K-Pop Choreography", country: "Korea" },
+            { name: "Hip Hop", country: "USA" }, { name: "Breakdancing", country: "USA" },
+            { name: "Lindy Hop", country: "USA" }, { name: "Charleston", country: "USA" },
+            { name: "Tap Dance", country: "USA" }, { name: "Square Dance", country: "USA" },
+            { name: "Voguing", country: "USA" }, { name: "Krumping", country: "USA" },
+            { name: "Halay", country: "Turkey" }, { name: "Whirling Dervish (Sema)", country: "Turkey" },
+            { name: "Belly Dance", country: "Middle East" }, { name: "Indlamu", country: "South Africa" },
+            { name: "Adumu (Jumping Dance)", country: "Kenya/Tanzania" }, { name: "Kizomba", country: "Angola" },
+            { name: "Afrobeat", country: "West Africa" }, { name: "Ballet", country: "France/Russia" },
+            { name: "Contemporary", country: "Global" }, { name: "Barynya", country: "Russia" },
+            { name: "Cossack Dance (Hopak)", country: "Ukraine/Russia" }, { name: "Irish Stepdance", country: "Ireland" }
+        ];
+
+        // --- DOM Elements ---
+        const loginSection = document.getElementById('loginSection');
+        const appSection = document.getElementById('appSection');
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const promptForm = document.getElementById('promptForm');
+        const aiModelSelect = document.getElementById('aiModel');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const danceList = document.getElementById('danceList');
+        const trendEraSelect = document.getElementById('trendEra');
+        
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        const stylePromptContent = document.getElementById('stylePromptContent');
+        const videoPromptsList = document.getElementById('videoPromptsList');
+        const copyStyleBtn = document.getElementById('copyStyleBtn');
+
+        // New Social Media Elements
+        const instaTitle = document.getElementById('instaTitle');
+        const instaComment = document.getElementById('instaComment');
+        const ytTitle = document.getElementById('ytTitle');
+        const ytComment = document.getElementById('ytComment');
+        const ytSeoTags = document.getElementById('ytSeoTags');
+        const ytDescription = document.getElementById('ytDescription');
+
+        // --- State ---
+        let apiKey = localStorage.getItem('gemini_api_key');
+
+        // --- Toast System ---
+        function showToast(message, type = 'info') {
+            // Remove existing toasts to prevent stacking issues
+            const existingToasts = document.querySelectorAll('.custom-toast');
+            existingToasts.forEach(t => t.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `custom-toast fixed bottom-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-2xl z-50 transition-all duration-300 opacity-0 translate-y-10 flex items-center gap-3 ${type === 'error' ? 'bg-red-900/90 text-white border border-red-500' : 'bg-gray-800/90 text-teal-400 border border-teal-500 backdrop-blur'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span class="text-sm font-medium">${message}</span>`;
+            document.body.appendChild(toast);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('opacity-0', 'translate-y-10');
+            });
+
+            // Remove
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10');
+                setTimeout(() => {
+                    if(toast.parentNode) toast.parentNode.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // --- Initialization ---
+        function init() {
+            populateDanceList();
+            populateTrendYears();
+            checkLoginStatus();
+            updateDuration();
+        }
+
+        function populateDanceList() {
+            danceDatabase.sort((a, b) => a.name.localeCompare(b.name));
+            danceList.innerHTML = danceDatabase.map(d => 
+                `<option value="${d.name} (${d.country})">`
+            ).join('');
+        }
+
+        function populateTrendYears() {
+            for (let year = 2025; year >= 2010; year--) {
+                const option = document.createElement('option');
+                option.value = `Viral steps from ${year}`;
+                option.text = `Most famous & trending steps in ${year}`;
+                trendEraSelect.appendChild(option);
+            }
+        }
+
+        function checkLoginStatus() {
+            if (apiKey) {
+                loginSection.classList.add('hidden');
+                appSection.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                loginSection.classList.remove('hidden');
+                appSection.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
+        function updateDuration() {
+            const selectedOption = aiModelSelect.options[aiModelSelect.selectedIndex];
+            const duration = selectedOption.getAttribute('data-duration');
+            durationDisplay.innerText = `${duration} Seconds`;
+        }
+
+        function robustCopy(text, btnElement) {
+            // Find the button icon inside the element passed
+            let iconElement;
+            if (btnElement.tagName === 'BUTTON') {
+                iconElement = btnElement;
+            } else {
+                return; // Guard clause
+            }
+            
+            const originalHTML = iconElement.innerHTML;
+            
+            const showSuccess = () => {
+                iconElement.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>';
+                setTimeout(() => iconElement.innerHTML = originalHTML, 2000);
+                showToast("Copied to clipboard!", "success");
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showSuccess).catch(err => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+
+            function fallbackCopy(text) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showSuccess();
+                } catch (err) {
+                    showToast("Copy failed. Please copy manually.", "error");
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // --- Event Listeners ---
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                apiKey = key;
+                localStorage.setItem('gemini_api_key', key);
+                checkLoginStatus();
+                apiKeyInput.value = '';
+                showToast("API Key saved securely.");
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('gemini_api_key');
+            apiKey = null;
+            checkLoginStatus();
+            resetUI();
+            showToast("Logged out successfully.");
+        });
+
+        aiModelSelect.addEventListener('change', updateDuration);
+        
+        copyStyleBtn.addEventListener('click', function() {
+            robustCopy(stylePromptContent.innerText, this);
+        });
+
+        function resetUI() {
+            resultsContainer.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            loadingIndicator.classList.add('hidden');
+        }
+
+        // --- Generator Logic ---
+
+        promptForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Set UI to Loading
+            emptyState.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            loadingIndicator.classList.remove('hidden');
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Gather Inputs
+            const numPrompts = document.getElementById('numPrompts').value;
+            const model = aiModelSelect.value;
+            const duration = aiModelSelect.options[aiModelSelect.selectedIndex].getAttribute('data-duration');
+            const dance = document.getElementById('danceInput').value || "Freestyle";
+            const speed = document.getElementById('danceSpeed').value; // Now defaults to Fast
+            const trend = trendEraSelect.value;
+            const context = document.getElementById('additionalContext').value;
+
+            // --- SYSTEM PROMPT CONSTRUCTION ---
+            const systemPrompt = `
+                You are an expert Creative Director and AI Prompt Engineer.
+
+                **Objective:**
+                1. Create ONE "Style & Makeover Prompt" following a STRICT format.
+                2. Create ${numPrompts} "Video Motion Prompts" for the dance action.
+                3. Create Social Media Metadata for Instagram and YouTube.
+
+                **INPUTS:**
+                - Dance Style: ${dance} (Apply a STREET DANCE / COMPETITIVE BATTLE aesthetic to this style)
+                - Trend: ${trend}
+                - Context: ${context}
+                - Speed: ${speed} (Must be FAST/ENERGETIC)
+
+                **PART 1: STYLE & MAKEOVER PROMPT (STRICT FORMAT)**
+                You must generate a prompt string that follows this EXACT structure line-by-line. 
+                CRITICAL RULE: Do not use pronouns like he/she/it. ALWAYS refer to the character as "dog boy".
+                CRITICAL RULE: The colors and style of the dress, cap, and shoes MUST be culturally accurate and specific to the selected '${dance}' style.
+                
+                Structure:
+                "here is my dog boy image and i want to change the background , dress, shoes, cap
+                
+                background: [Describe a high-quality setting matching '${context}']
+                dress : dog boy should wearing [Design a specific outfit with colors and style TRADITIONAL or TYPICAL for '${dance}'. MUST include text branding: '(YouTube Icon) poorDogy (Instagram Icon)' with high contrast colors]. dog boy is standing in mountain pose (tadasana) and camera is in front.
+                shoes dog boy should wearing [Describe shoes matching the '${dance}' culture/style and outfit colors]
+                cap:  dog boy should wearing [Describe a cap, hat, or headgear matching the '${dance}' culture/style and outfit colors]"
+
+                **PART 2: VIDEO MOTION PROMPTS - CRITICAL RULES**
+                
+                1. **MUSIC CONSTANT:** You MUST select ONE specific high-energy, fast-tempo song title or specific beat style suitable for '${dance}'.
+                   - **CRITICAL:** You MUST write this EXACT song title in EVERY SINGLE video prompt generated below. 
+                   - **FORBIDDEN:** Do NOT use words like "same music", "continue", "previous song". You must fully write out the song name every time.
+                
+                2. **CONTEXT & QUALITY:** - The dance must be presented as a **Street Dance Battle** or **High-Stakes Competition** performance, even if the base style is traditional (e.g., "Bharatanatyam Battle", "Salsa Street Off").
+                   - **Quality:** MUST include "8k resolution, cinematic lighting, photorealistic, 8k" in every prompt.
+                   - **Duration:** Do NOT include any specific time duration (e.g., "5 seconds", "10s") in the text.
+
+                3. **ENERGY LEVEL:** The dance MUST be HIGH ENERGY, FAST, and AGGRESSIVE. 
+                   - **CRITICAL:** Even if the traditional dance is slow, you must describe a "Fast Paced Remix" or "High Energy Version" of the moves. No slow motion allowed.
+
+                4. **Structure per Prompt:**
+                   - **Music:** [Full Song Name/Genre]
+                   - **Action:** Describe fast, energetic '${dance}' moves merged with street/competitive flair using "dog boy" as the subject.
+                   - **Visuals:** 8k resolution, cinematic lighting.
+                   - **Flow:** Continuous, seamless transitions. 
+                   - **Density:** 6-8 distinct moves per prompt.
+
+                **PART 3: SOCIAL MEDIA METADATA**
+                - **Instagram:**
+                    1. **Title:** Mix of Catchy Title + 5-7 Relevant Hashtags + Emojis.
+                    2. **Pin Comment:** Engaging question or call to action related to '${dance}'.
+                - **YouTube:**
+                    1. **Title:** Mix of SEO-friendly Title + 3 Hashtags + Emojis.
+                    2. **Pin Comment:** Call to subscribe and check bio.
+                    3. **SEO Tags:** Comma-separated list of 20+ keywords. MUST INCLUDE EXACTLY: "poorDogy", "poor dogy", "Dog Boy", "Dog Boy Dance", "AI Video", "AI Dance", "Shorts", "YtShorts", "Viral", "Trending", "fyp". PLUS specific keywords related to '${dance}'.
+                    4. **Description:**
+                        Line 1: The Full Title from point 1.
+                        Line 2: [Blank Line]
+                        Line 3: A short 2-sentence description of the dance and the dog boy character.
+                        Line 4: [Blank Line]
+                        Line 5+: A VERTICAL list of 10+ Hashtags (one per line, starting with #).
+                
+                **OUTPUT FORMAT (STRICT JSON):**
+                Return ONLY a JSON object with this structure:
+                {
+                    "style_prompt": "The full formatted string from Part 1, preserving line breaks",
+                    "video_prompts": ["Motion Prompt 1 (With Specific Song Name, 8k, No Duration)...", "Motion Prompt 2 (With SAME Specific Song Name, 8k, No Duration)..."],
+                    "instagram": {
+                        "title": "Title text...",
+                        "pin_comment": "Comment text..."
+                    },
+                    "youtube": {
+                        "title": "Title text...",
+                        "pin_comment": "Comment text...",
+                        "seo_tags": "tag1, tag2, poorDogy, ...",
+                        "description": "Title\n\nDescription text...\n\n#tag1\n#tag2\n..."
+                    }
+                }
+            `;
+
+            try {
+                const result = await callGemini(systemPrompt);
+                renderOutput(result);
+                showToast("Prompts & Metadata generated!", "success");
+            } catch (error) {
+                showToast("Generation Error: " + error.message, "error");
+                resetUI();
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                generateBtn.disabled = false;
+                generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
+
+        async function callGemini(promptText) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: promptText }] }],
+                generationConfig: { temperature: 0.8, response_mime_type: "application/json" }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error("API Request Failed. Check your Key.");
+            const data = await response.json();
+            const text = data.candidates[0].content.parts[0].text;
+            return JSON.parse(text);
+        }
+
+        function renderOutput(data) {
+            // Render Style Prompt
+            stylePromptContent.innerText = data.style_prompt || "Error generating style prompt.";
+            
+            // Render Video Prompts
+            videoPromptsList.innerHTML = '';
+            const prompts = data.video_prompts || [];
+            
+            prompts.forEach((text, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-gray-800 border border-gray-700 rounded-lg p-5 relative group hover:border-teal-500 transition shadow-md';
+                
+                const p = document.createElement('p');
+                p.className = 'text-sm text-gray-300 pr-8 font-mono leading-relaxed';
+                p.innerText = text;
+
+                const btn = document.createElement('button');
+                btn.className = 'absolute top-3 right-3 p-2 text-gray-500 hover:text-teal-400 bg-gray-900 border border-gray-700 rounded transition';
+                btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+                btn.addEventListener('click', function() { robustCopy(text, this); });
+
+                const badge = document.createElement('span');
+                badge.className = 'absolute bottom-3 right-3 text-[10px] text-teal-300 font-bold bg-gray-900 border border-teal-900 px-2 py-0.5 rounded uppercase';
+                badge.innerText = `VIDEO PROMPT ${index + 1}`;
+
+                card.appendChild(p);
+                card.appendChild(btn);
+                card.appendChild(badge);
+                videoPromptsList.appendChild(card);
+            });
+
+            // Render Social Media Metadata
+            if (data.instagram) {
+                instaTitle.innerText = data.instagram.title || "No title generated";
+                instaComment.innerText = data.instagram.pin_comment || "No comment generated";
+            }
+            if (data.youtube) {
+                ytTitle.innerText = data.youtube.title || "No title generated";
+                ytComment.innerText = data.youtube.pin_comment || "No comment generated";
+                ytSeoTags.innerText = data.youtube.seo_tags || "No tags generated";
+                ytDescription.innerText = data.youtube.description || "No description generated";
+            }
+
+            resultsContainer.classList.remove('hidden');
+        }
+
+        init();
+    </script>
+</body>
+</html>
