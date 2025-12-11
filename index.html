@@ -514,39 +514,121 @@
     <script>
         // --- Data ---
         const danceDatabase = [
-            { name: "Bharatanatyam", country: "India" }, { name: "Kathak", country: "India" }, 
-            { name: "Kathakali", country: "India" }, { name: "Kuchipudi", country: "India" }, 
-            { name: "Odissi", country: "India" }, { name: "Sattriya", country: "India" }, 
-            { name: "Manipuri", country: "India" }, { name: "Mohiniyattam", country: "India" }, 
-            { name: "Chhau", country: "India" }, { name: "Lavani", country: "India" }, 
-            { name: "Koli", country: "India" }, { name: "Lezim", country: "India" }, 
-            { name: "Bhangra", country: "India" }, { name: "Giddha", country: "India" }, 
-            { name: "Garba", country: "India" }, { name: "Dandiya Raas", country: "India" }, 
-            { name: "Ghoomar", country: "India" }, { name: "Kalbelia", country: "India" }, 
-            { name: "Bihu", country: "India" }, { name: "Yakshagana", country: "India" }, 
-            { name: "Samba", country: "Brazil" }, { name: "Tango", country: "Argentina" }, 
-            { name: "Flamenco", country: "Spain" }, { name: "Waltz", country: "Austria" }, 
-            { name: "Polka", country: "Czech Republic" }, { name: "Capoeira", country: "Brazil" }, 
-            { name: "Salsa", country: "Cuba" }, { name: "Merengue", country: "Dominican Republic" }, 
-            { name: "Bachata", country: "Dominican Republic" }, { name: "Cha-Cha-Cha", country: "Cuba" }, 
-            { name: "Paso Doble", country: "Spain" }, { name: "Cancan", country: "France" }, 
-            { name: "Tarantella", country: "Italy" }, { name: "Syrtaki", country: "Greece" }, 
-            { name: "Tinikling", country: "Philippines" }, { name: "Kabuki", country: "Japan" },
-            { name: "Haka", country: "New Zealand" }, { name: "Poi", country: "New Zealand" },
-            { name: "Dragon Dance", country: "China" }, { name: "Lion Dance", country: "China" },
-            { name: "Yangge", country: "China" }, { name: "Buchaechum (Fan Dance)", country: "Korea" },
-            { name: "Talchum", country: "Korea" }, { name: "K-Pop Choreography", country: "Korea" },
-            { name: "Hip Hop", country: "USA" }, { name: "Breakdancing", country: "USA" },
-            { name: "Lindy Hop", country: "USA" }, { name: "Charleston", country: "USA" },
-            { name: "Tap Dance", country: "USA" }, { name: "Square Dance", country: "USA" },
-            { name: "Voguing", country: "USA" }, { name: "Krumping", country: "USA" },
-            { name: "Halay", country: "Turkey" }, { name: "Whirling Dervish (Sema)", country: "Turkey" },
-            { name: "Belly Dance", country: "Middle East" }, { name: "Indlamu", country: "South Africa" },
-            { name: "Adumu (Jumping Dance)", country: "Kenya/Tanzania" }, { name: "Kizomba", country: "Angola" },
-            { name: "Afrobeat", country: "West Africa" }, { name: "Ballet", country: "France/Russia" },
-            { name: "Contemporary", country: "Global" }, { name: "Barynya", country: "Russia" },
-            { name: "Cossack Dance (Hopak)", country: "Ukraine/Russia" }, { name: "Irish Stepdance", country: "Ireland" }
+            // 🔥 Worldwide Most Famous & Trending
+            { name: "Hip Hop", country: "USA" },
+            { name: "Breakdancing", country: "USA" },
+            { name: "Ballet", country: "France/Russia" },
+            { name: "Salsa", country: "Cuba" },
+            { name: "Tango", country: "Argentina" },
+            { name: "Belly Dance", country: "Middle East" },
+            { name: "Flamenco", country: "Spain" },
+            { name: "K-Pop Choreography", country: "Korea" },
+            { name: "Reggaeton", country: "Puerto Rico" },
+            { name: "Dancehall", country: "Jamaica" },
+            { name: "Zumba", country: "Global" },
+            { name: "Shuffle Dance (Melbourne Shuffle)", country: "Australia" },
+            { name: "Afrobeat", country: "West Africa" },
+            { name: "Bollywood Dance", country: "India" },
+            { name: "Contemporary", country: "Global" },
+
+            // 🌍 Famous Partner/Club Dances
+            { name: "Bachata", country: "Dominican Republic" },
+            { name: "Merengue", country: "Dominican Republic" },
+            { name: "Cha-Cha-Cha", country: "Cuba" },
+            { name: "Foxtrot", country: "USA" },
+            { name: "Quickstep", country: "UK" },
+            { name: "Waltz", country: "Austria" },
+            { name: "Jive", country: "USA/UK" },
+            { name: "Samba", country: "Brazil" },
+            { name: "Samba de Gafieira", country: "Brazil" },
+            { name: "Lambada", country: "Brazil" },
+
+            // 🇮🇳 India's Famous Classical & Folk Dances
+            { name: "Bharatanatyam", country: "India" },
+            { name: "Kathak", country: "India" },
+            { name: "Kathakali", country: "India" },
+            { name: "Kuchipudi", country: "India" },
+            { name: "Odissi", country: "India" },
+            { name: "Sattriya", country: "India" },
+            { name: "Manipuri", country: "India" },
+            { name: "Mohiniyattam", country: "India" },
+            { name: "Chhau", country: "India" },
+            { name: "Lavani", country: "India" },
+            { name: "Koli", country: "India" },
+            { name: "Lezim", country: "India" },
+            { name: "Bhangra", country: "India" },
+            { name: "Giddha", country: "India" },
+            { name: "Garba", country: "India" },
+            { name: "Dandiya Raas", country: "India" },
+            { name: "Ghoomar", country: "India" },
+            { name: "Kalbelia", country: "India" },
+            { name: "Bihu", country: "India" },
+            { name: "Yakshagana", country: "India" },
+
+            // 🇨🇳 China, Japan, Korea
+            { name: "Dragon Dance", country: "China" },
+            { name: "Lion Dance", country: "China" },
+            { name: "Yangge", country: "China" },
+            { name: "Kabuki", country: "Japan" },
+            { name: "Buchaechum (Fan Dance)", country: "Korea" },
+            { name: "Talchum", country: "Korea" },
+
+            // 🌏 Southeast Asia
+            { name: "Tinikling", country: "Philippines" },
+            { name: "Balinese Legong", country: "Indonesia" },
+            { name: "Jaipongan", country: "Indonesia" },
+            { name: "Tahitian Ori", country: "Tahiti" },
+            { name: "Hula", country: "Hawaii" },
+
+            // 🇪🇺 Europe Folk & Classical
+            { name: "Polka", country: "Czech Republic" },
+            { name: "Cancan", country: "France" },
+            { name: "Tarantella", country: "Italy" },
+            { name: "Syrtaki", country: "Greece" },
+            { name: "Mazurka", country: "Poland" },
+            { name: "Fandango", country: "Portugal/Spain" },
+            { name: "Irish Stepdance", country: "Ireland" },
+            { name: "Ceilidh Dance", country: "Scotland" },
+            { name: "Highland Dance", country: "Scotland" },
+
+            // 🇷🇺 Russia & Eastern Europe
+            { name: "Barynya", country: "Russia" },
+            { name: "Cossack Dance (Hopak)", country: "Ukraine/Russia" },
+
+            // 🌍 Middle East & Africa
+            { name: "Halay", country: "Turkey" },
+            { name: "Whirling Dervish (Sema)", country: "Turkey" },
+            { name: "Eskista", country: "Ethiopia" },
+            { name: "Gwara Gwara", country: "South Africa" },
+            { name: "Indlamu", country: "South Africa" },
+            { name: "Adumu (Jumping Dance)", country: "Kenya/Tanzania" },
+            { name: "Kizomba", country: "Angola" },
+            { name: "Kpanlogo", country: "Ghana" },
+            { name: "Dabke", country: "Lebanon/Syria/Jordan" },
+
+            // 🇳🇿 New Zealand
+            { name: "Haka", country: "New Zealand" },
+            { name: "Poi", country: "New Zealand" },
+
+            // 🇧🇷 Brazil
+            { name: "Capoeira", country: "Brazil" },
+            { name: "Forró", country: "Brazil" },
+            { name: "Samba Reggae", country: "Brazil" },
+            { name: "Bumba Meu Boi", country: "Brazil" },
+
+            // 🇺🇸 USA More Dance Forms
+            { name: "Lindy Hop", country: "USA" },
+            { name: "Charleston", country: "USA" },
+            { name: "Tap Dance", country: "USA" },
+            { name: "Square Dance", country: "USA" },
+            { name: "Voguing", country: "USA" },
+            { name: "Krumping", country: "USA" },
+
+            // 🌐 Viral Internet Dances
+            { name: "Viral TikTok Dance", country: "Global" }
         ];
+
+
 
         // --- DOM Elements ---
         const loginSection = document.getElementById('loginSection');
